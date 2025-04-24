@@ -6,7 +6,10 @@ until nc -z db 3306; do
   sleep 1
 done
 
-echo "Banco disponível. Rodando migrações..."
+echo "Banco disponível. Instalando dependências..."
+composer install
+
+echo "Rodando migrações..."
 php /var/www/html/app/Migrations/runMigrations.php
 
 echo "Iniciando servidor PHP..."

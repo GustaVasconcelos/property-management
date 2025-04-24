@@ -18,6 +18,8 @@ WORKDIR /var/www/html
 
 COPY . .
 
+RUN git config --global --add safe.directory /var/www/html
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN composer install --no-interaction --prefer-dist
