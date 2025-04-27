@@ -22,11 +22,13 @@ class CreatePropertiesTable
                     name VARCHAR(255) NOT NULL,
                     address VARCHAR(255) NOT NULL,
                     image VARCHAR(255) NOT NULL,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
                 )
             ";
 
             $this->db->exec($sql);
+            echo "Tabela 'properties' criada com sucesso.\n";
         } catch (\PDOException $e) {
             echo "Error creating table: " . $e->getMessage() . "\n";
         }
