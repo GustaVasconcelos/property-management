@@ -60,7 +60,14 @@ class PropertyServiceTest extends TestCase
 
     public function testCreatePropertyFailure(): void
     {
-        $data = ['name' => 'Property 2', 'image' => ['name' => 'img.jpg', 'tmp_name' => '/tmp/a', 'error' => UPLOAD_ERR_OK]];
+        $data = [
+            'name' => 'Property 2',
+            'image' => [
+                'name' => 'img.jpg',
+                'tmp_name' => '/tmp/a',
+                'error' => UPLOAD_ERR_OK
+            ]
+        ];
 
         $this->imageUploadHelperMock->method('uploadImage')->willThrowException(new Exception('Erro no envio da imagem.'));
 
@@ -124,16 +131,26 @@ class PropertyServiceTest extends TestCase
 
     public function testUpdatePropertySuccess(): void
     {
-        $data = ['name' => 'Atualizada', 'image' => ['name' => 'new.jpg', 'tmp_name' => '/tmp/x', 'error' => UPLOAD_ERR_OK]];
+        $data = [
+            'name' => 'Atualizada',
+            'image' => [
+                'name' => 'new.jpg',
+                'tmp_name' => '/tmp/x',
+                'error' => UPLOAD_ERR_OK
+            ]
+        ];
+
         $this->propertyRepositoryMock->method('find')->willReturn(['image' => 'old.jpg']);
         $this->imageUploadHelperMock->method('uploadImage')->willReturn('uploads/new.jpg');
         $this->propertyRepositoryMock->method('update')->willReturn(true);
+
         $this->formatResultMock->method('success')->willReturn([
             'status' => 'success',
             'message' => 'Propriedade atualizada com sucesso'
         ]);
 
         $result = $this->propertyService->updateProperty(1, $data);
+
         $this->assertEquals('success', $result['status']);
     }
 
@@ -142,6 +159,7 @@ class PropertyServiceTest extends TestCase
         $this->propertyRepositoryMock->method('find')->willReturn(['image' => 'old.jpg']);
         $this->imageUploadHelperMock->method('uploadImage')->willReturn('uploads/new.jpg');
         $this->propertyRepositoryMock->method('update')->willReturn(false);
+
         $this->formatResultMock->method('error')->willReturn([
             'status' => 'error',
             'message' => 'Falha ao atualizar propriedade',
@@ -149,6 +167,7 @@ class PropertyServiceTest extends TestCase
         ]);
 
         $result = $this->propertyService->updateProperty(1, ['name' => 'x']);
+
         $this->assertEquals('error', $result['status']);
     }
 
@@ -163,6 +182,7 @@ class PropertyServiceTest extends TestCase
         ]);
 
         $result = $this->propertyService->updateProperty(1, []);
+
         $this->assertEquals('error', $result['status']);
     }
 
@@ -170,12 +190,14 @@ class PropertyServiceTest extends TestCase
     {
         $this->propertyRepositoryMock->method('find')->willReturn(['image' => null]);
         $this->propertyRepositoryMock->method('delete')->willReturn(true);
+
         $this->formatResultMock->method('success')->willReturn([
             'status' => 'success',
             'message' => 'Propriedade deletada com sucesso'
         ]);
 
         $result = $this->propertyService->deleteProperty(1);
+
         $this->assertEquals('success', $result['status']);
     }
 
@@ -183,6 +205,7 @@ class PropertyServiceTest extends TestCase
     {
         $this->propertyRepositoryMock->method('find')->willReturn(['image' => null]);
         $this->propertyRepositoryMock->method('delete')->willReturn(false);
+
         $this->formatResultMock->method('error')->willReturn([
             'status' => 'error',
             'message' => 'Falha ao deletar propriedade',
@@ -190,6 +213,7 @@ class PropertyServiceTest extends TestCase
         ]);
 
         $result = $this->propertyService->deleteProperty(1);
+
         $this->assertEquals('error', $result['status']);
     }
 
@@ -204,14 +228,19 @@ class PropertyServiceTest extends TestCase
         ]);
 
         $result = $this->propertyService->deleteProperty(1);
+
         $this->assertEquals('error', $result['status']);
     }
 
     public function testGetAllPropertiesSuccess(): void
     {
-        $properties = [['id' => 1, 'name' => 'Imóvel A'], ['id' => 2, 'name' => 'Imóvel B']];
+        $properties = [
+            ['id' => 1, 'name' => 'Imóvel A'],
+            ['id' => 2, 'name' => 'Imóvel B']
+        ];
 
         $this->propertyRepositoryMock->method('all')->willReturn($properties);
+
         $this->formatResultMock->method('success')->willReturn([
             'status' => 'success',
             'data' => $properties,
@@ -219,6 +248,7 @@ class PropertyServiceTest extends TestCase
         ]);
 
         $result = $this->propertyService->getAllProperties();
+
         $this->assertEquals('success', $result['status']);
     }
 
@@ -233,6 +263,7 @@ class PropertyServiceTest extends TestCase
         ]);
 
         $result = $this->propertyService->getAllProperties();
+
         $this->assertEquals('error', $result['status']);
     }
 }

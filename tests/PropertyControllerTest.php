@@ -216,23 +216,18 @@ class PropertyControllerTest extends TestCase
             ->with(1)
             ->willReturn(['message' => 'Deletado com sucesso']);
 
-        $properties = [['id' => 1, 'name' => 'Property 1']];
-
         $this->propertyServiceMock->expects($this->once())
             ->method('getAllProperties')
-            ->willReturn(['data' => $properties]);
-
-        $this->formatResultMock->expects($this->once())
-            ->method('view')
-            ->with('properties/index', [
-                'properties' => $properties,
-                'message' => 'Deletado com sucesso'
-            ])
-            ->willReturn('view_rendered');
+            ->willReturn(['data' => [['id' => 1, 'name' => 'Property 1']]]);
 
         $result = $this->propertyController->destroy(1);
 
-        $this->assertEquals('view_rendered', $result);
+        $expectedResponse = json_encode([
+            'success' => true,
+            'message' => 'Deletado com sucesso'
+        ]);
+
+        $this->assertEquals($expectedResponse, $result);
     }
 
     public function testDestroyFailure(): void
@@ -242,14 +237,14 @@ class PropertyControllerTest extends TestCase
             ->with(1)
             ->willThrowException(new Exception('Erro'));
 
-        $this->formatResultMock->expects($this->once())
-            ->method('error')
-            ->with('Erro ao deletar propriedade: Erro', 500)
-            ->willReturn('error_response');
-
         $result = $this->propertyController->destroy(1);
 
-        $this->assertEquals('error_response', $result);
+        $expectedResponse = json_encode([
+            'success' => false,
+            'message' => 'Erro ao deletar a propriedade: Erro'
+        ]);
+
+        $this->assertEquals($expectedResponse, $result);
     }
 
     public function testIndexSuccess(): void
