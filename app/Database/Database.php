@@ -2,41 +2,28 @@
 
 namespace App\Database;
 
+use App\Interfaces\DatabaseInterface;
 use PDO;
-use PDOException;
 
-class Database
+class Database implements DatabaseInterface
 {
-    private PDO $pdo;
+    private $connection;
 
     public function __construct()
     {
-        $host = getenv('DB_HOST') ?: 'db';
-        $port = getenv('DB_PORT') ?: '3306';
-        $db   = getenv('DB_NAME') ?: 'property_db';
-        $user = getenv('DB_USER') ?: 'user';
-        $pass = getenv('DB_PASSWORD') ?: 'secret';
-        $charset = 'utf8mb4';
+        $host = getenv('DB_HOST');         
+        $dbName = getenv('DB_NAME');       
+        $username = getenv('DB_USER');    
+        $password = getenv('DB_PASSWORD'); 
 
-        $dsn = "mysql:host={$host};port={$port};dbname={$db};charset={$charset}";
+        $dsn = "mysql:host=$host;dbname=$dbName";
+        $this->connection = new PDO($dsn, $username, $password);
 
-        try {
-            $this->pdo = new PDO(
-                $dsn,
-                $user,
-                $pass,
-                [
-                    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                ]
-            );
-        } catch (PDOException $e) {
-            die("Erro na conexão com o banco de dados: " . $e->getMessage());
-        }
+        $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
     public function getConnection(): PDO
     {
-        return $this->pdo;
+        return $this->connection;
     }
 }
