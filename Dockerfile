@@ -24,6 +24,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN composer install --no-interaction --prefer-dist
 
+COPY uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN chmod +x /usr/local/bin/entrypoint.sh
