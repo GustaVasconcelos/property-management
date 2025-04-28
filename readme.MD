@@ -20,6 +20,14 @@ Aplicativo web desenvolvido em PHP, integrado a uma API Laravel para gestão de 
 git clone https://github.com/GustaVasconcelos/property-management.git
 cd property-management
 
+# Antes de subir o projeto, crie um arquivo .env na raiz com o seguinte conteúdo: 
+
+DB_HOST=db
+DB_PORT=3306
+DB_NAME=property_db
+DB_USER=user
+DB_PASS=password
+
 # Rode o docker e espere a instalação finalizar
 docker compose up --build
 ```
