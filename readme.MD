@@ -26,7 +26,7 @@ DB_HOST=db
 DB_PORT=3306
 DB_NAME=property_db
 DB_USER=user
-DB_PASS=password
+DB_PASSWORD=password
 
 # Rode o docker e espere a instalação finalizar
 docker compose up --build
